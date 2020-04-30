@@ -1,3 +1,9 @@
+# Files that I want to ignore.
+*~
+
+# Vim files
+*.swp
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
