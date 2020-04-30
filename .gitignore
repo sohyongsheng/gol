@@ -1,5 +1,6 @@
 # Files that I want to ignore.
 *~
+tags
 
 # Vim files
 *.swp
