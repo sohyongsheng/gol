@@ -1,6 +1,7 @@
 # Files that I want to ignore.
 *~
 tags
+output/*
 
 # Vim files
 *.swp
@@ -134,3 +135,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Files I want to keep.
+!.gitkeep
