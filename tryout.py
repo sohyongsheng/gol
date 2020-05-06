@@ -5,11 +5,13 @@ from gol.view import Viewer
 
 if __name__ == '__main__':
     viewer = Viewer()
-    seed_path = Path('seed.txt')
-    output_dir = Path('output')
-    board = Board(seed_path, output_dir)
+    board = Board(
+        size = (80, 24),
+        # config_path = Path('seed.txt'),
+        # output_dir = Path('output'),
+    )
     viewer.show(board)
-    while True:
+    for i in range(int(1e6)):
         board.tick()
         viewer.show(board)
 

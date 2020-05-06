@@ -1,14 +1,33 @@
+from gol.generator import RandomCellGenerator
 from gol.io import BoardIO
 from gol.rules import Rules
 
 class Board:
-    def __init__(self, config_path, output_dir):
-        self.config_path = config_path
-        self.output_dir = output_dir
-        self.io = BoardIO(output_dir)
-        self.generation, self.cells = self.io.read(config_path)
+    def __init__(self, 
+        size = None,
+        config_path = None, 
+        output_dir = None,
+    ):
+        self.io = BoardIO(output_dir = output_dir)
+        if config_path is not None:
+            assert size is None
+            self.config_path = config_path
+            self.generation, self.cells = self.io.read(config_path)
+            self.size = self.get_size(self.cells)
+        else:
+            assert size is not None
+            self.size = size
+            self.generator = RandomCellGenerator()
+            self.cells = self.generator.get_cells(self.size)
         self.link(self.cells)
         self.rules = Rules()
+
+
+    def get_size(self, cells):
+        height = len(cells)
+        row, *_ = cells
+        width = len(row)
+        return height, width
 
     def link(self, cells):
         *tops, _ = _, *bottoms = cells

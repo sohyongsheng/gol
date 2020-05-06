@@ -1,7 +1,7 @@
 from gol.cells import Cell
 
 class BoardIO:
-    def __init__(self, output_dir):
+    def __init__(self, output_dir = None):
         self.symbols = {
             'alive': '1',
             'dead': '0',
