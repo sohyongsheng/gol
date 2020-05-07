@@ -7,8 +7,7 @@ class TestBoard(unittest.TestCase):
     def setUp(self):
         test_dir = Path('tests')
         seed_path = test_dir / 'seeds' / 'simple.txt'
-        output_dir = Path('output')
-        self.board = Board(seed_path, output_dir)
+        self.board = Board(config_path = seed_path)
         
     def test_init(self):
         cells = self.board.cells
