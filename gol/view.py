@@ -25,5 +25,8 @@ class Viewer:
         return s
 
     def show(self, board):
-        s = self.stringify_board(board)
-        print(s)
+        print(self.stringify_board(board))
+        s = input("Press Enter to continue, or 'q' to exit.")
+        if s == 'q':
+            raise SystemExit
+

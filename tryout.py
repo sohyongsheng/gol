@@ -12,9 +12,7 @@ if __name__ == '__main__':
         # output_dir = Path('output'),
     )
     viewer.show(board)
-    input("Press Enter to continue.")
     for i in range(int(1e6)):
         board.tick()
         viewer.show(board)
-        input("Press Enter to continue.")
 
