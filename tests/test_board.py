@@ -1,7 +1,8 @@
 from pathlib import Path
 
-from gol.board import Board
 import pytest
+
+from gol.board import Board
 
 class TestBoard():
     @pytest.fixture(scope = 'class')

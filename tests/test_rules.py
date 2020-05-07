@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from gol.board import Board
 from gol.cell import Cell
 from gol.rules import (
@@ -9,7 +11,6 @@ from gol.rules import (
     Rules,
     Survival,
 )
-import pytest
 
 class TestUnderpopulation():
     @pytest.fixture(scope = 'class')
