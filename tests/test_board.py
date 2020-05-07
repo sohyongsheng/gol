@@ -1,39 +1,39 @@
 from pathlib import Path
-import unittest
 
 from gol.board import Board
+import pytest
 
-class TestBoard(unittest.TestCase):
-    def setUp(self):
+class TestBoard():
+    @pytest.fixture(scope = 'class')
+    def board(self):
         test_dir = Path('tests')
         seed_path = test_dir / 'seeds' / 'simple.txt'
-        self.board = Board(config_path = seed_path)
+        board = Board(config_path = seed_path)
+        return board
         
-    def test_init(self):
-        cells = self.board.cells
+    def test_init(self, board):
+        cells = board.cells
         # Start from top left hand corner.
         start = cells[0][0]
         # Move towards bottom right hand corner.
         end = cells[-1][-1]
-        self.assertIsNot(start, end)
+        assert start is not end
         # Confirm some neighbor cells don't exist.
-        self.assertIsNone(start.left)
-        self.assertIsNone(start.top)
-        self.assertIsNone(end.right)
-        self.assertIsNone(end.bottom)
+        assert start.left is None
+        assert start.top is None
+        assert end.right is None
+        assert end.bottom is None
         cell = (
             start.right.right
             .bottom.left.left
             .bottom.right.right
         )
-        self.assertIs(cell, end)
+        assert cell is end
         # Move back to start point again.
         cell = (
             cell.top.top
             .left.bottom.bottom
             .left.top.top
         )
-        self.assertIs(cell, start)
+        assert cell is start
 
-if __name__ == '__main__':
-    unittest.main()
