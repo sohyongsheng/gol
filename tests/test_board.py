@@ -16,14 +16,17 @@ class TestBoard():
         cells = board.cells
         # Start from top left hand corner.
         start = cells[0][0]
-        # Move towards bottom right hand corner.
+        # Target is bottom right hand corner.
         end = cells[-1][-1]
         assert start is not end
+
         # Confirm some neighbor cells don't exist.
         assert start.left is None
         assert start.top is None
         assert end.right is None
         assert end.bottom is None
+
+        # Move towards end point.
         cell = (
             start.right.right
             .bottom.left.left

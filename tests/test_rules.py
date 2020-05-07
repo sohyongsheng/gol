@@ -23,12 +23,14 @@ class TestUnderpopulation():
             cell = Cell(alive = True)
             underpopulation.apply(cell, num_alive)
             assert not cell.alive
+
         # No effect for alive cell when underpopulation 
         # doesn't apply.
         for num_alive in [2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = True)
             underpopulation.apply(cell, num_alive)
             assert cell.alive
+
         # No effect for dead cell.
         for num_alive in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = False)
@@ -46,11 +48,13 @@ class TestSurvival():
             cell = Cell(alive = True)
             survival.apply(cell, num_alive)
             assert cell.alive
+
         # No effect when out of working range.
         for num_alive in [0, 1, 4, 5, 6, 7, 8]:
             cell = Cell(alive = True)
             survival.apply(cell, num_alive)
             assert cell.alive
+
         # No effect when cell is dead.
         for num_alive in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = False)
@@ -68,11 +72,13 @@ class TestOverpopulation():
             cell = Cell(alive = True)
             overpopulation.apply(cell, num_alive)
             assert not cell.alive
+
         # No effect when not in working range of overpopulation.
         for num_alive in [0, 1, 2, 3]:
             cell = Cell(alive = True)
             overpopulation.apply(cell, num_alive)
             assert cell.alive
+
         # No effect when cell is already dead.
         for num_alive in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = False)
@@ -91,11 +97,13 @@ class TestReproduction():
         cell = Cell(alive = False)
         reproduction.apply(cell, num_alive)
         assert cell.alive
+
         # No effect for out of working range.
         for num_alive in [0, 1, 2, 4, 5, 6, 7, 8]:
             cell = Cell(alive = False)
             reproduction.apply(cell, num_alive)
             assert not cell.alive
+
         # No effect when cell is already alive.
         for num_alive in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = True)
@@ -118,6 +126,7 @@ class TestRules():
 
     def test_get_num_alive_neighbors(self, rules, get_board):
         board = get_board('simple.txt')
+
         # First row.
         cell = board.cells[0][0]
         num_alive = rules.get_num_alive_neighbors(cell)
@@ -128,6 +137,7 @@ class TestRules():
         cell = board.cells[0][2]
         num_alive = rules.get_num_alive_neighbors(cell)
         assert num_alive == 0
+
         # Second row.
         cell = board.cells[1][0]
         num_alive = rules.get_num_alive_neighbors(cell)
@@ -138,6 +148,7 @@ class TestRules():
         cell = board.cells[1][2]
         num_alive = rules.get_num_alive_neighbors(cell)
         assert num_alive == 2
+
         # Third row.
         cell = board.cells[2][0]
         num_alive = rules.get_num_alive_neighbors(cell)
@@ -156,102 +167,119 @@ class TestRules():
         assert not center_cell.alive
         rules.apply(center_cell)
         assert not center_cell.alive
+
         # Dead cell, 1 alive neighbour.
         board = get_board('dead_1.txt')
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
         assert not center_cell.alive
+
         # Dead cell, 2 alive neighbours.
         board = get_board('dead_2.txt')
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
         assert not center_cell.alive
+
         # Dead cell, 3 alive neighbours.
         board = get_board('dead_3.txt')
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
         assert center_cell.alive
+
         # Dead cell, 4 alive neighbours.
         board = get_board('dead_4.txt')
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
         assert not center_cell.alive
+
         # Dead cell, 5 alive neighbours.
         board = get_board('dead_5.txt')
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
         assert not center_cell.alive
+
         # Dead cell, 6 alive neighbours.
         board = get_board('dead_6.txt')
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
         assert not center_cell.alive
+
         # Dead cell, 7 alive neighbours.
         board = get_board('dead_7.txt')
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
         assert not center_cell.alive
+
         # Dead cell, 8 alive neighbours.
         board = get_board('dead_8.txt')
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
         assert not center_cell.alive
+
         # Alive cell, 0 alive neighbours.
         board = get_board('alive_0.txt')
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
         assert not center_cell.alive
+
         # Alive cell, 1 alive neighbour.
         board = get_board('alive_1.txt')
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
         assert not center_cell.alive
+
         # Alive cell, 2 alive neighbours.
         board = get_board('alive_2.txt')
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
         assert center_cell.alive
+
         # Alive cell, 3 alive neighbours.
         board = get_board('alive_3.txt')
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
         assert center_cell.alive
+
         # Alive cell, 4 alive neighbours.
         board = get_board('alive_4.txt')
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
         assert not center_cell.alive
+
         # Alive cell, 5 alive neighbours.
         board = get_board('alive_5.txt')
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
         assert not center_cell.alive
+
         # Alive cell, 6 alive neighbours.
         board = get_board('alive_6.txt')
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
         assert not center_cell.alive
+
         # Alive cell, 7 alive neighbours.
         board = get_board('alive_7.txt')
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
         assert not center_cell.alive
+
         # Alive cell, 8 alive neighbours.
         board = get_board('alive_8.txt')
         center_cell = board.cells[1][1]
