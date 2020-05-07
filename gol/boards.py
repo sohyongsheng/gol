@@ -2,6 +2,11 @@ from gol.generator import RandomCellGenerator
 from gol.io import BoardIO
 from gol.rules import Rules
 
+class Size:
+    def __init__(self, height, width):
+        self.height = height
+        self.width = width
+
 class Board:
     def __init__(self, 
         size = None,
@@ -22,12 +27,12 @@ class Board:
         self.link(self.cells)
         self.rules = Rules()
 
-
     def get_size(self, cells):
         height = len(cells)
         row, *_ = cells
         width = len(row)
-        return height, width
+        size = Size(height, width)
+        return size
 
     def link(self, cells):
         *tops, _ = _, *bottoms = cells

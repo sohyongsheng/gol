@@ -14,10 +14,9 @@ class RandomCellGenerator:
         self.dice = BooleanDice(frac_alive)
 
     def get_cells(self, size):
-        height, width = size
         cells = [
-            self.get_row(width)
-            for i in range(height)
+            self.get_row(size.width)
+            for i in range(size.height)
         ]
         return cells
 
