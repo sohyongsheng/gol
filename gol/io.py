@@ -1,4 +1,4 @@
-from gol.cells import Cell
+from gol.cell import Cell
 
 class BoardIO:
     def __init__(self, output_dir = None):

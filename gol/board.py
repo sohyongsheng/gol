@@ -24,6 +24,7 @@ class Board:
             self.size = size
             self.generator = RandomCellGenerator()
             self.cells = self.generator.get_cells(self.size)
+            s = self.get_size(self.cells)
         self.link(self.cells)
         self.rules = Rules()
 

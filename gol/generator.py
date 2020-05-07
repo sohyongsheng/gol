@@ -1,6 +1,6 @@
 import random
 
-from gol.cells import Cell
+from gol.cell import Cell
 
 class BooleanDice:
     def __init__(self, probability = 0.5):

@@ -1,8 +1,8 @@
 from pathlib import Path
 import unittest
 
-from gol.boards import Board
-from gol.cells import Cell
+from gol.board import Board
+from gol.cell import Cell
 from gol.rules import (
     Underpopulation, 
     Overpopulation, 

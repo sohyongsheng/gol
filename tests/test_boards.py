@@ -1,7 +1,7 @@
 from pathlib import Path
 import unittest
 
-from gol.boards import Board
+from gol.board import Board
 
 class TestBoard(unittest.TestCase):
     def setUp(self):
