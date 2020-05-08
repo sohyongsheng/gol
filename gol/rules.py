@@ -1,26 +1,22 @@
 class Rule:
-    def within_range(self, cell, num_alive):
+    def in_range(self, cell, num_alive):
         return num_alive in range(
             self.min_alive, 
             self.max_alive + 1,
         )
-
-    def apply(self, cell, num_alive):
-        if self.conditions(cell, num_alive):
-            self.consequence(cell)
 
 class Underpopulation(Rule):
     def __init__(self):
         self.min_alive = 0
         self.max_alive = 1 
 
-    def conditions(self, cell, num_alive):
+    def applies(self, cell, num_alive):
         return all([
             cell.alive,
-            self.within_range(cell, num_alive),
+            self.in_range(cell, num_alive),
         ])
 
-    def consequence(self, cell):
+    def mutate(self, cell):
         cell.alive = False
 
 class Survival(Rule):
@@ -28,13 +24,13 @@ class Survival(Rule):
         self.min_alive = 2
         self.max_alive = 3
 
-    def conditions(self, cell, num_alive):
+    def applies(self, cell, num_alive):
         return all([
             cell.alive,
-            self.within_range(cell, num_alive),
+            self.in_range(cell, num_alive),
         ])
 
-    def consequence(self, cell):
+    def mutate(self, cell):
         pass
 
 class Overpopulation(Rule):
@@ -42,13 +38,13 @@ class Overpopulation(Rule):
         self.min_alive = 4
         self.max_alive = 8
 
-    def conditions(self, cell, num_alive):
+    def applies(self, cell, num_alive):
         return all([
             cell.alive,
-            self.within_range(cell, num_alive),
+            self.in_range(cell, num_alive),
         ])
 
-    def consequence(self, cell):
+    def mutate(self, cell):
         cell.alive = False
 
 class Reproduction(Rule):
@@ -56,13 +52,13 @@ class Reproduction(Rule):
         self.min_alive = 3
         self.max_alive = 3
 
-    def conditions(self, cell, num_alive):
+    def applies(self, cell, num_alive):
         return all([
             not cell.alive,
-            self.within_range(cell, num_alive),
+            self.in_range(cell, num_alive),
         ])
 
-    def consequence(self, cell):
+    def mutate(self, cell):
         cell.alive = True
 
 class Rules:
@@ -77,7 +73,9 @@ class Rules:
     def apply(self, cell):
         num_alive = self.get_num_alive_neighbors(cell)
         for rule in self.rules:
-            rule.apply(cell, num_alive)
+            if rule.applies(cell, num_alive):
+                rule.mutate(cell)
+                break
 
     def get_num_alive_neighbors(self, cell):
         neighbors = self.get_neighbors(cell)

@@ -5,14 +5,14 @@ from gol.view import Viewer
 
 if __name__ == '__main__':
     viewer = Viewer()
-    height, width = 10, 20
+    height, width = 1000, 1000
     board = Board(
         size = Size(height, width),
         # config_path = Path('seed.txt'),
         # output_dir = Path('output'),
     )
-    viewer.show(board)
+    # viewer.show(board)
     for i in range(int(1e6)):
         board.tick()
-        viewer.show(board)
+        # viewer.show(board)
 

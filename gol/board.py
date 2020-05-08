@@ -1,5 +1,6 @@
 from gol.generator import RandomCellGenerator
 from gol.io import BoardIO
+from gol.misc import time_elapsed
 from gol.rules import Rules
 
 class Size:
@@ -51,6 +52,7 @@ class Board:
         for left, right in zip(lefts, rights):
             left.right, right.left = right, left
 
+    @time_elapsed
     def tick(self):
         for row in self.cells:
             for cell in row:

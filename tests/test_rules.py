@@ -21,21 +21,20 @@ class TestUnderpopulation():
         # Cell should die during underpopulation.
         for num_alive in [0, 1]:
             cell = Cell(alive = True)
-            underpopulation.apply(cell, num_alive)
+            assert underpopulation.applies(cell, num_alive) 
+            underpopulation.mutate(cell)
             assert not cell.alive
 
         # No effect for alive cell when underpopulation 
         # doesn't apply.
         for num_alive in [2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = True)
-            underpopulation.apply(cell, num_alive)
-            assert cell.alive
+            assert not underpopulation.applies(cell, num_alive)
 
         # No effect for dead cell.
         for num_alive in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = False)
-            underpopulation.apply(cell, num_alive)
-            assert not cell.alive
+            assert not underpopulation.applies(cell, num_alive)
 
 class TestSurvival():
     @pytest.fixture(scope = 'class')
@@ -46,20 +45,19 @@ class TestSurvival():
         # Alive cell continues to live.
         for num_alive in [2, 3]:
             cell = Cell(alive = True)
-            survival.apply(cell, num_alive)
+            assert survival.applies(cell, num_alive)
+            survival.mutate(cell)
             assert cell.alive
 
         # No effect when out of working range.
         for num_alive in [0, 1, 4, 5, 6, 7, 8]:
             cell = Cell(alive = True)
-            survival.apply(cell, num_alive)
-            assert cell.alive
+            assert not survival.applies(cell, num_alive)
 
         # No effect when cell is dead.
         for num_alive in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = False)
-            survival.apply(cell, num_alive)
-            assert not cell.alive
+            assert not survival.applies(cell, num_alive)
 
 class TestOverpopulation():
     @pytest.fixture(scope = 'class')
@@ -70,20 +68,19 @@ class TestOverpopulation():
         # Cell should die during overpopulation.
         for num_alive in [4, 5, 6, 7, 8]:
             cell = Cell(alive = True)
-            overpopulation.apply(cell, num_alive)
+            assert overpopulation.applies(cell, num_alive)
+            overpopulation.mutate(cell)
             assert not cell.alive
 
         # No effect when not in working range of overpopulation.
         for num_alive in [0, 1, 2, 3]:
             cell = Cell(alive = True)
-            overpopulation.apply(cell, num_alive)
-            assert cell.alive
+            assert not overpopulation.applies(cell, num_alive)
 
         # No effect when cell is already dead.
         for num_alive in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = False)
-            overpopulation.apply(cell, num_alive)
-            assert not cell.alive
+            assert not overpopulation.applies(cell, num_alive)
 
 class TestReproduction():
     @pytest.fixture(scope = 'class')
@@ -95,20 +92,19 @@ class TestReproduction():
         # is exactly 3.
         num_alive = 3
         cell = Cell(alive = False)
-        reproduction.apply(cell, num_alive)
+        assert reproduction.applies(cell, num_alive)
+        reproduction.mutate(cell)
         assert cell.alive
 
         # No effect for out of working range.
         for num_alive in [0, 1, 2, 4, 5, 6, 7, 8]:
             cell = Cell(alive = False)
-            reproduction.apply(cell, num_alive)
-            assert not cell.alive
+            assert not reproduction.applies(cell, num_alive)
 
         # No effect when cell is already alive.
         for num_alive in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = True)
-            reproduction.apply(cell, num_alive)
-            assert cell.alive
+            assert not reproduction.applies(cell, num_alive)
 
 class TestRules():
     @pytest.fixture(scope = 'class')
