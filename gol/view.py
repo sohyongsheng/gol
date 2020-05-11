@@ -13,7 +13,7 @@ class View:
         visibility = 0
         curses.curs_set(visibility)
         for board in generate_boards():
-            stdscr.erase()
+            stdscr.clear()
             s = self.stringify_view(board)
             stdscr.addstr(s)
             stdscr.refresh()

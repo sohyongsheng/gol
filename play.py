@@ -1,16 +1,15 @@
-from pathlib import Path
-
-from gol.board import Board, Size
+from gol.board import Board
 from gol.controller import Controller
 from gol.view import View
+from gol.parse import Parser
 
 if __name__ == '__main__':
+    parser = Parser()
+    args = parser.parse()
     view = View()
-    seed_dir = Path('seeds')
     board = Board(
-        # size = Size(20, 20),
-        config_path = seed_dir / 'glider.txt',
-        # output_dir = Path('output'),
+        size = args.size,
+        config_path = args.seed_path,
     )
-    controller = Controller(view, board)
+    controller = Controller(view, board, args.time_delay)
     controller.play()
