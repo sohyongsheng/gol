@@ -7,12 +7,13 @@ class View:
             'alive': '\N{WHITE LARGE SQUARE}',
             'dead': '\N{BLACK LARGE SQUARE}',
         }
-        self.controller = None
 
     def play(self, stdscr, generate_boards):
         curses.use_default_colors()
+        visibility = 0
+        curses.curs_set(visibility)
         for board in generate_boards():
-            stdscr.clear()
+            stdscr.erase()
             s = self.stringify_view(board)
             stdscr.addstr(s)
             stdscr.refresh()
