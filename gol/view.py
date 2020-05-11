@@ -1,9 +1,29 @@
-class Viewer:
+import curses
+import time
+
+class View:
     def __init__(self):
         self.symbols = {
-            'alive': 'X',
-            'dead': '.',
+            'alive': '\N{WHITE LARGE SQUARE}',
+            'dead': '\N{BLACK LARGE SQUARE}',
         }
+        self.controller = None
+
+    def play(self, stdscr, generate_boards):
+        curses.use_default_colors()
+        for board in generate_boards():
+            stdscr.clear()
+            s = self.stringify_view(board)
+            stdscr.addstr(s)
+            stdscr.refresh()
+
+    def stringify_view(self, board):
+        status = f"Generation: {board.generation}"
+        s = '\n'.join([
+            status, 
+            self.stringify_board(board),
+        ])
+        return s
 
     def stringify_cell(self, cell):
         k = 'alive' if cell.alive else 'dead'
@@ -11,7 +31,7 @@ class Viewer:
         return c
 
     def stringify_row(self, row):
-        s = ' '.join(
+        s = ''.join(
             self.stringify_cell(cell)
             for cell in row
         )
@@ -23,10 +43,4 @@ class Viewer:
             for row in board.cells
         )
         return s
-
-    def show(self, board):
-        print(self.stringify_board(board))
-        s = input("Press Enter to continue, or 'q' to exit.")
-        if s == 'q':
-            raise SystemExit
 
