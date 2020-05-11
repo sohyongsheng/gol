@@ -10,27 +10,27 @@ class Underpopulation(Rule):
         self.min_alive = 0
         self.max_alive = 1 
 
-    def applies(self, cell, num_alive):
+    def is_valid(self, cell, num_alive):
         return all([
             cell.alive,
             self.in_range(cell, num_alive),
         ])
 
-    def mutate(self, cell):
-        cell.alive = False
+    def apply(self, cell):
+        cell.to_live = False
 
 class Survival(Rule):
     def __init__(self):
         self.min_alive = 2
         self.max_alive = 3
 
-    def applies(self, cell, num_alive):
+    def is_valid(self, cell, num_alive):
         return all([
             cell.alive,
             self.in_range(cell, num_alive),
         ])
 
-    def mutate(self, cell):
+    def apply(self, cell):
         pass
 
 class Overpopulation(Rule):
@@ -38,28 +38,28 @@ class Overpopulation(Rule):
         self.min_alive = 4
         self.max_alive = 8
 
-    def applies(self, cell, num_alive):
+    def is_valid(self, cell, num_alive):
         return all([
             cell.alive,
             self.in_range(cell, num_alive),
         ])
 
-    def mutate(self, cell):
-        cell.alive = False
+    def apply(self, cell):
+        cell.to_live = False
 
 class Reproduction(Rule):
     def __init__(self):
         self.min_alive = 3
         self.max_alive = 3
 
-    def applies(self, cell, num_alive):
+    def is_valid(self, cell, num_alive):
         return all([
             not cell.alive,
             self.in_range(cell, num_alive),
         ])
 
-    def mutate(self, cell):
-        cell.alive = True
+    def apply(self, cell):
+        cell.to_live = True
 
 class Rules:
     def __init__(self):
@@ -73,8 +73,8 @@ class Rules:
     def apply(self, cell):
         num_alive = self.get_num_alive_neighbors(cell)
         for rule in self.rules:
-            if rule.applies(cell, num_alive):
-                rule.mutate(cell)
+            if rule.is_valid(cell, num_alive):
+                rule.apply(cell)
                 break
 
     def get_num_alive_neighbors(self, cell):

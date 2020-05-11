@@ -21,20 +21,21 @@ class TestUnderpopulation():
         # Cell should die during underpopulation.
         for num_alive in [0, 1]:
             cell = Cell(alive = True)
-            assert underpopulation.applies(cell, num_alive) 
-            underpopulation.mutate(cell)
+            assert underpopulation.is_valid(cell, num_alive) 
+            underpopulation.apply(cell)
+            cell.update()
             assert not cell.alive
 
         # No effect for alive cell when underpopulation 
         # doesn't apply.
         for num_alive in [2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = True)
-            assert not underpopulation.applies(cell, num_alive)
+            assert not underpopulation.is_valid(cell, num_alive)
 
         # No effect for dead cell.
         for num_alive in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = False)
-            assert not underpopulation.applies(cell, num_alive)
+            assert not underpopulation.is_valid(cell, num_alive)
 
 class TestSurvival():
     @pytest.fixture(scope = 'class')
@@ -45,19 +46,20 @@ class TestSurvival():
         # Alive cell continues to live.
         for num_alive in [2, 3]:
             cell = Cell(alive = True)
-            assert survival.applies(cell, num_alive)
-            survival.mutate(cell)
+            assert survival.is_valid(cell, num_alive)
+            survival.apply(cell)
+            cell.update()
             assert cell.alive
 
         # No effect when out of working range.
         for num_alive in [0, 1, 4, 5, 6, 7, 8]:
             cell = Cell(alive = True)
-            assert not survival.applies(cell, num_alive)
+            assert not survival.is_valid(cell, num_alive)
 
         # No effect when cell is dead.
         for num_alive in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = False)
-            assert not survival.applies(cell, num_alive)
+            assert not survival.is_valid(cell, num_alive)
 
 class TestOverpopulation():
     @pytest.fixture(scope = 'class')
@@ -68,19 +70,20 @@ class TestOverpopulation():
         # Cell should die during overpopulation.
         for num_alive in [4, 5, 6, 7, 8]:
             cell = Cell(alive = True)
-            assert overpopulation.applies(cell, num_alive)
-            overpopulation.mutate(cell)
+            assert overpopulation.is_valid(cell, num_alive)
+            overpopulation.apply(cell)
+            cell.update()
             assert not cell.alive
 
         # No effect when not in working range of overpopulation.
         for num_alive in [0, 1, 2, 3]:
             cell = Cell(alive = True)
-            assert not overpopulation.applies(cell, num_alive)
+            assert not overpopulation.is_valid(cell, num_alive)
 
         # No effect when cell is already dead.
         for num_alive in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = False)
-            assert not overpopulation.applies(cell, num_alive)
+            assert not overpopulation.is_valid(cell, num_alive)
 
 class TestReproduction():
     @pytest.fixture(scope = 'class')
@@ -92,19 +95,20 @@ class TestReproduction():
         # is exactly 3.
         num_alive = 3
         cell = Cell(alive = False)
-        assert reproduction.applies(cell, num_alive)
-        reproduction.mutate(cell)
+        assert reproduction.is_valid(cell, num_alive)
+        reproduction.apply(cell)
+        cell.update()
         assert cell.alive
 
         # No effect for out of working range.
         for num_alive in [0, 1, 2, 4, 5, 6, 7, 8]:
             cell = Cell(alive = False)
-            assert not reproduction.applies(cell, num_alive)
+            assert not reproduction.is_valid(cell, num_alive)
 
         # No effect when cell is already alive.
         for num_alive in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
             cell = Cell(alive = True)
-            assert not reproduction.applies(cell, num_alive)
+            assert not reproduction.is_valid(cell, num_alive)
 
 class TestRules():
     @pytest.fixture(scope = 'class')
@@ -162,6 +166,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive
 
         # Dead cell, 1 alive neighbour.
@@ -169,6 +174,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive
 
         # Dead cell, 2 alive neighbours.
@@ -176,6 +182,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive
 
         # Dead cell, 3 alive neighbours.
@@ -183,6 +190,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert center_cell.alive
 
         # Dead cell, 4 alive neighbours.
@@ -190,6 +198,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive
 
         # Dead cell, 5 alive neighbours.
@@ -197,6 +206,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive
 
         # Dead cell, 6 alive neighbours.
@@ -204,6 +214,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive
 
         # Dead cell, 7 alive neighbours.
@@ -211,6 +222,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive
 
         # Dead cell, 8 alive neighbours.
@@ -218,6 +230,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert not center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive
 
         # Alive cell, 0 alive neighbours.
@@ -225,6 +238,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive
 
         # Alive cell, 1 alive neighbour.
@@ -232,6 +246,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive
 
         # Alive cell, 2 alive neighbours.
@@ -239,6 +254,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert center_cell.alive
 
         # Alive cell, 3 alive neighbours.
@@ -246,6 +262,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert center_cell.alive
 
         # Alive cell, 4 alive neighbours.
@@ -253,6 +270,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive
 
         # Alive cell, 5 alive neighbours.
@@ -260,6 +278,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive
 
         # Alive cell, 6 alive neighbours.
@@ -267,6 +286,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive
 
         # Alive cell, 7 alive neighbours.
@@ -274,6 +294,7 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive
 
         # Alive cell, 8 alive neighbours.
@@ -281,4 +302,5 @@ class TestRules():
         center_cell = board.cells[1][1]
         assert center_cell.alive
         rules.apply(center_cell)
+        center_cell.update()
         assert not center_cell.alive

@@ -22,6 +22,7 @@ class Board:
             self.size = self.get_size(self.cells)
         else:
             assert size is not None
+            self.generation = 0
             self.size = size
             self.generator = RandomCellGenerator()
             self.cells = self.generator.get_cells(self.size)
@@ -52,9 +53,13 @@ class Board:
         for left, right in zip(lefts, rights):
             left.right, right.left = right, left
 
-    @time_elapsed
+    # @time_elapsed
     def tick(self):
+        self.generation += 1
         for row in self.cells:
             for cell in row:
                 self.rules.apply(cell)
+        for row in self.cells:
+            for cell in row:
+                cell.update()
 
