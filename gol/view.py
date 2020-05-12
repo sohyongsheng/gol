@@ -4,8 +4,10 @@ import time
 class View:
     def __init__(self):
         self.symbols = {
-            'alive': '\N{WHITE LARGE SQUARE}',
-            'dead': '\N{BLACK LARGE SQUARE}',
+            # 'alive': '\N{WHITE LARGE SQUARE}',
+            'alive': '\N{FULL BLOCK}',
+            # 'dead': '\N{BLACK LARGE SQUARE}',
+            'dead': '\N{LIGHT SHADE}',
         }
 
     def play(self, stdscr, generate_boards):
@@ -13,7 +15,7 @@ class View:
         visibility = 0
         curses.curs_set(visibility)
         for board in generate_boards():
-            stdscr.clear()
+            stdscr.erase()
             s = self.stringify_view(board)
             stdscr.addstr(s)
             stdscr.refresh()
