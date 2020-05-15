@@ -2,6 +2,10 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 from gol.board import Size
+from gol.errors import (
+    BadInitialization, 
+    SeedPathNotFound,
+)
 
 class Arguments:
     def __init__(self):
@@ -40,14 +44,24 @@ class Parser:
     def parse(self):
         args = self.parser.parse_args()
         self.args.time_delay = args.time_delay
-        # TODO Throw and handle exceptions 
-        # instead of abusing assertions.
+        if not (
+            (args.seed_path is None and args.size is not None)
+            or (args.seed_path is not None and args.size is None)
+        ):
+            raise BadInitialization((
+                "Only either seed path or size must be given. "
+                "We cannot specify both the seed path and size, "
+                "nor can we leave both the seed path and size "
+                "blank."
+            ), args.seed_path, args.size)
         if args.seed_path is None:
-            assert args.size is not None
             self.args.size = self.parse_size(args.size)
         else:
-            assert args.size is None
-            assert args.seed_path.is_file()
+            if not args.seed_path.is_file():
+                raise SeedPathNotFound(
+                    "Seed path is not found.",
+                    args.seed_path,
+                )
             self.args.seed_path = args.seed_path
         return self.args
 

@@ -1,4 +1,5 @@
 from gol.cell import Cell
+from gol.errors import InconsistentWidths, InvalidSymbol
 
 class BoardIO:
     def __init__(self, output_dir = None):
@@ -20,6 +21,12 @@ class Reader:
     def read(self, config_path):
         generation = self.get_generation(config_path)
         cells = self.get_cells(config_path)
+        unique_widths = set(len(row) for row in cells)
+        if len(unique_widths) != 1:
+            raise InconsistentWidths(
+                "Inconsistent widths amongst different rows.",
+                unique_widths,
+            )
         return generation, cells
 
     def get_generation(self, config_path):
@@ -39,7 +46,11 @@ class Reader:
         return cells
 
     def get_cell(self, c):
-        assert c in self.symbols.values()
+        if c not in self.symbols.values():
+            raise InvalidSymbol(
+                "Invalid symbol read from seed file.",
+                c,
+            )
         alive = (c == self.symbols['alive'])
         cell = Cell(alive = alive)
         return cell

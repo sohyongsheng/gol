@@ -1,12 +1,13 @@
 import curses
 import time
 
+from gol.board import Size
+from gol.errors import BoardTooLarge
+
 class View:
     def __init__(self):
         self.symbols = {
-            # 'alive': '\N{WHITE LARGE SQUARE}',
             'alive': '\N{FULL BLOCK}',
-            # 'dead': '\N{BLACK LARGE SQUARE}',
             'dead': '\N{LIGHT SHADE}',
         }
 
@@ -14,7 +15,19 @@ class View:
         curses.use_default_colors()
         visibility = 0
         curses.curs_set(visibility)
+        max_size = Size( 
+            curses.LINES - 1,
+            curses.COLS - 1,
+        )
         for board in generate_boards():
+            if (
+                board.size.height > max_size.height
+                or board.size.width > max_size.width
+            ):
+                raise BoardTooLarge((
+                    "Board size is too large and "
+                    "cannot fit into screen."
+                ), board.size, max_size)
             stdscr.erase()
             s = self.stringify_view(board)
             stdscr.addstr(s)

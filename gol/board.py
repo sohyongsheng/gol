@@ -8,6 +8,10 @@ class Size:
         self.height = height
         self.width = width
 
+    def __str__(self):
+        s = "height, width = {self.height}, {self.width}"
+        return s
+
 class Board:
     def __init__(self, 
         size = None,
