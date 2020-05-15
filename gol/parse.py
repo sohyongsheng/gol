@@ -20,26 +20,40 @@ class Parser:
         self.parser.add_argument(
             '-p', '--seed_path',
             type = Path,
-            help = "Path of seed text file."
+            help = (
+                "Path of seed text file. "
+                "If this is not specified, "
+                "then we will initialize the board randomly. "
+                "In that case, we must specify the size of "
+                "the board. That said, we cannot specify "
+                "both the seed path and size, nor can we "
+                "leave both the seed path and size unspecified."
+            ),
         )
         self.parser.add_argument(
             '-s', '--size',
             nargs = 2,
             type = int,
-            help = "Height and width of board.",
+            help = (
+                "Height and width of board. "
+                "When this is specified, the board will be "
+                "randomly initialized with each cell having an "
+                "equal chance of being alive or dead. "
+                "Also, we cannot specify the seed path "
+                "if we specify the size of the board here."
+            ),
         )
         self.parser.add_argument(
             '-t', '--time_delay',
             type = float,
             default = 0.3,
-            help = "Time delay before showing next generation.",
+            help = (
+                "Time delay between generations. "
+                "More precisely, it's the time delay between "
+                "drawing boards of consecutive generations."
+            ),
         )
         self.args = Arguments()
-
-    def parse_size(self, size):
-        height, width = size
-        size = Size(height, width)
-        return size
 
     def parse(self):
         args = self.parser.parse_args()
@@ -64,4 +78,9 @@ class Parser:
                 )
             self.args.seed_path = args.seed_path
         return self.args
+
+    def parse_size(self, size):
+        height, width = size
+        size = Size(height, width)
+        return size
 
