@@ -1,6 +1,9 @@
+import textwrap
+
 class Error(Exception):
     def prefix(self, message):
         s = f"Error: {self.message}"
+        s = textwrap.fill(s)
         return s
 
 class BadInitialization(Error):
@@ -72,7 +75,4 @@ class InconsistentWidths(Error):
             f"Unique widths: {self.unique_widths}",
         ])
         return s
-
-
-
 
