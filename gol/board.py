@@ -16,6 +16,7 @@ class Board:
     def __init__(self, 
         size = None,
         config_path = None, 
+        wrap_around = False,
         output_dir = None,
     ):
         self.io = BoardIO(output_dir = output_dir)
@@ -31,7 +32,7 @@ class Board:
             self.generator = RandomCellGenerator()
             self.cells = self.generator.get_cells(self.size)
             s = self.get_size(self.cells)
-        self.link(self.cells)
+        self.link(self.cells, wrap_around)
         self.rules = Rules()
 
     def get_size(self, cells):
@@ -41,21 +42,25 @@ class Board:
         size = Size(height, width)
         return size
 
-    def link(self, cells):
-        *tops, _ = _, *bottoms = cells
+    def link(self, cells, wrap_around):
+        *tops, last = first, *bottoms = cells
         for top, bottom in zip(tops, bottoms):
-            self.link_horizontally(top)
+            self.link_horizontally(top, wrap_around)
             self.link_vertically(top, bottom)
-        self.link_horizontally(bottom)
+        self.link_horizontally(bottom, wrap_around)
+        if wrap_around:
+            self.link_vertically(last, first)
 
     def link_vertically(self, tops, bottoms):
         for top, bottom in zip(tops, bottoms):
             top.bottom, bottom.top = bottom, top
 
-    def link_horizontally(self, row):
-        *lefts, _ = _, *rights = row
+    def link_horizontally(self, row, wrap_around):
+        *lefts, last = first, *rights = row
         for left, right in zip(lefts, rights):
             left.right, right.left = right, left
+        if wrap_around:
+            last.right, first.left = first, last
 
     # @time_elapsed
     def tick(self):

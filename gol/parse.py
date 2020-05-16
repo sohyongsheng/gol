@@ -8,9 +8,16 @@ from gol.errors import (
 )
 
 class Arguments:
-    def __init__(self):
-        self.seed_path = None
-        self.size = None
+    def __init__(self,
+        seed_path,
+        size,
+        time_delay,
+        wrap_around,
+    ):
+        self.seed_path = seed_path
+        self.size = size
+        self.time_delay = time_delay
+        self.wrap_around = wrap_around
 
 class Parser:
     def __init__(self):
@@ -53,11 +60,13 @@ class Parser:
                 "drawing boards of consecutive generations."
             ),
         )
-        self.args = Arguments()
+        self.parser.add_argument(
+            '-w', '--wrap_around',
+            action = 'store_true',
+        )
 
     def parse(self):
         args = self.parser.parse_args()
-        self.args.time_delay = args.time_delay
         if not (
             (args.seed_path is None and args.size is not None)
             or (args.seed_path is not None and args.size is None)
@@ -69,15 +78,21 @@ class Parser:
                 "blank."
             ), args.seed_path, args.size)
         if args.seed_path is None:
-            self.args.size = self.parse_size(args.size)
+            size = self.parse_size(args.size)
         else:
+            size = None
             if not args.seed_path.is_file():
                 raise SeedPathNotFound(
                     "Seed path is not found.",
                     args.seed_path,
                 )
-            self.args.seed_path = args.seed_path
-        return self.args
+        args = Arguments(
+            args.seed_path,
+            size,
+            args.time_delay,
+            args.wrap_around,
+        )
+        return args
 
     def parse_size(self, size):
         height, width = size

@@ -5,13 +5,14 @@ from gol.view import View
 from gol.parse import Parser
 
 if __name__ == '__main__':
-    parser = Parser()
     try:
+        parser = Parser()
         args = parser.parse()
         view = View()
         board = Board(
             size = args.size,
             config_path = args.seed_path,
+            wrap_around = args.wrap_around,
         )
         controller = Controller(view, board, args.time_delay)
         controller.play()

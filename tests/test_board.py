@@ -6,13 +6,19 @@ from gol.board import Board
 
 class TestBoard():
     @pytest.fixture(scope = 'class')
-    def board(self):
-        test_dir = Path('tests')
-        seed_path = test_dir / 'seeds' / 'simple.txt'
-        board = Board(config_path = seed_path)
-        return board
+    def get_board(self):
+        def wrapper(wrap_around = False):
+            test_dir = Path('tests')
+            seed_path = test_dir / 'seeds' / 'simple.txt'
+            board = Board(
+                config_path = seed_path,
+                wrap_around = wrap_around,
+            )
+            return board
+        return wrapper
         
-    def test_init(self, board):
+    def test_init(self, get_board):
+        board = get_board()
         cells = board.cells
         # Start from top left hand corner.
         start = cells[0][0]
@@ -41,3 +47,15 @@ class TestBoard():
         )
         assert cell is start
 
+        # Board with wrap-around.
+        board = get_board(wrap_around = True)
+        cells = board.cells
+        # Start from top left hand corner.
+        top_left = cells[0][0]
+        top_right = cells[0][-1]
+        bottom_left = cells[-1][0]
+        bottom_right = cells[-1][-1]
+        assert top_left.left is top_right
+        assert top_right.top is bottom_right
+        assert bottom_right.right is bottom_left
+        assert bottom_left.bottom is top_left
