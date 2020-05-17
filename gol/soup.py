@@ -9,7 +9,7 @@ class BooleanDice:
     def roll(self):
         return random.random() > self.probability
 
-class RandomCellGenerator:
+class Soup:
     def __init__(self, frac_alive = 0.5):
         self.dice = BooleanDice(frac_alive)
 

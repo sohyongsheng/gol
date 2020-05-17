@@ -1,4 +1,4 @@
-from gol.generator import RandomCellGenerator
+from gol.soup import Soup
 from gol.io import BoardIO
 from gol.misc import time_elapsed
 from gol.rules import Rules
@@ -29,8 +29,8 @@ class Board:
             assert size is not None
             self.generation = 0
             self.size = size
-            self.generator = RandomCellGenerator()
-            self.cells = self.generator.get_cells(self.size)
+            self.soup = Soup()
+            self.cells = self.soup.get_cells(self.size)
             s = self.get_size(self.cells)
         self.link(self.cells, wrap_around)
         self.rules = Rules()
